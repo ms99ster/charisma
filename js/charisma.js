@@ -1,4 +1,17 @@
 $(document).ready(function () {
+  var HeaderView = Backbone.View.extend({
+    template: Handlebars.templates.header,
+    initialize: function(){
+      console.log("HeaderView Created");
+      this.render();
+    },
+    render: function(){
+      $("body").prepend(this.template({}));
+      return this;
+    }
+  });
+  var headerView = new HeaderView({});
+
     //themes, change CSS with JS
     //default theme(CSS) is cerulean, change it if needed
     var defaultTheme = 'cerulean';
