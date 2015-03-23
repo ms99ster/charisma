@@ -2,7 +2,6 @@ $(document).ready(function () {
   var HeaderView = Backbone.View.extend({
     template: Handlebars.templates.header,
     initialize: function(){
-      console.log("HeaderView Created");
       this.render();
     },
     render: function(){
@@ -10,6 +9,70 @@ $(document).ready(function () {
       return this;
     }
   });
+
+  var LeftMenuView = Backbone.View.extend({
+    className: "col-sm-2 col-lg-2",
+    template: Handlebars.templates.leftMenu,
+    initialize: function(){
+      this.render();
+    },
+    render: function () {
+      this.$el.html(this.template({}));
+      return this;
+    }
+  });
+
+  var NoScriptView = Backbone.View.extend({
+    tagName: "noscript",
+    template: Handlebars.templates.noscript,
+    initialize: function(){
+      this.render();
+    },
+    render: function(){
+      this.$el.html(this.template());
+      return this;
+    }
+  });
+  var ContentView = Backbone.View.extend({
+    tagName: "div",
+    id: "content",
+    className: "col-lg-10 col-sm-10",
+    template: Handlebars.templates.content,
+    initialize: function(){
+      this.render();
+    },
+    render: function(){
+      this.$el.html(this.template());
+      return this;
+    }
+  });
+  var ContainerView = Backbone.View.extend({
+    initialize: function(options){
+      this.options = options;
+      this.render();
+    },
+    render: function(){
+      _.each(this.options.children1, function (element) {
+        this.$el.append(element.$el);
+      },this);
+      return this;
+    }
+  });
+  var leftMenuView = new LeftMenuView({});
+  var noScriptView = new NoScriptView({});
+  var contentView = new ContentView({});
+
+  var row = new ContainerView({
+    tagName: "div",
+    className:"row",
+    children1: [leftMenuView, noScriptView, contentView]
+  });
+  var ch_container = new ContainerView({
+    className: "ch-container",
+    children1: [row]
+  });
+
+  $("body").prepend(ch_container.$el);
   var headerView = new HeaderView({});
 
     //themes, change CSS with JS
