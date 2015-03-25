@@ -10,6 +10,148 @@ $(document).ready(function () {
     }
   });
 
+  var MenuButtonView = Backbone.View.extend({
+    tagName: "li",
+    className: function () {
+      return this.model.className;
+    },
+    template: Handlebars.templates.menuButton,
+    initialize: function () {
+      this.render();
+    },
+    render: function () {
+      this.$el.html(this.template(this.model));
+      if (this.model.collection) {
+        var menuButtonList = new MenuButtonList({
+          model: this.model.model,
+          collection: this.model.collection
+        });
+        this.$el.append(menuButtonList.$el);
+      }
+      return this;
+    }
+  });
+  var MenuButtonList = Backbone.View.extend({
+    tagName: "ul",
+    className: function () {
+      return this.model.listClass;
+    },
+    initialize: function () {
+      this.render();
+    },
+    render: function () {
+      this.$el.html();
+      _.each(this.collection, function (buttonModel, index, list) {
+        var dashBoardMenu = new MenuButtonView({model: buttonModel});
+        this.$el.append(dashBoardMenu.$el);
+      }, this);
+      return this;
+    }
+  });
+  var menuButtonList = new MenuButtonList({
+    model: {
+      listClass: "nav nav-pills nav-stacked main-menu"
+    },
+    collection: [
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "index.html",
+        iconClass: "glyphicon glyphicon-home",
+        label: "Dashboard"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "ui.html",
+        iconClass: "glyphicon glyphicon-eye-open",
+        label: "UI Features"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "form.html",
+        iconClass: "glyphicon glyphicon-edit",
+        label: "Forms"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "chart.html",
+        iconClass: "glyphicon glyphicon-list-alt",
+        label: "Charts"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "typography.html",
+        iconClass: "glyphicon glyphicon-font",
+        label: "Typography"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "gallery.html",
+        iconClass: "glyphicon glyphicon-picture",
+        label: "Gallery"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "table.html",
+        iconClass: "glyphicon glyphicon-align-justify",
+        label: "Tables"
+      },
+      {
+        className: "accordion",
+        label: "Accordion Menu",
+        hyperlink: "#",
+        iconClass: "glyphicon glyphicon-plus",
+        model: {
+          listClass: "nav nav-pills nav-stacked"
+        },
+        collection: [
+          {
+            label: "Child Menu 1",
+            hyperlink: "#"
+          }, {
+            label: "Child Menu 2",
+            hyperlink: "#"
+          }
+        ]
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "calendar.html",
+        iconClass: "glyphicon glyphicon-calendar",
+        label: "Calendar"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "grid.html",
+        iconClass: "glyphicon glyphicon-th",
+        label: "Grid"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "tour.html",
+        iconClass: "glyphicon glyphicon-globe",
+        label: "Tour"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "icon.html",
+        iconClass: "glyphicon glyphicon-star",
+        label: "Icons"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "error.html",
+        iconClass: "glyphicon glyphicon-ban-circle",
+        label: "Error Page"
+      },
+      {
+        hyperlinkClass: "ajax-link",
+        hyperlink: "login.html",
+        iconClass: "glyphicon glyphicon-lock",
+        label: "Login Page"
+      }
+    ]
+  });
+
   var LeftMenuView = Backbone.View.extend({
     className: "col-sm-2 col-lg-2",
     template: Handlebars.templates.leftMenu,
@@ -91,6 +233,7 @@ $(document).ready(function () {
     }
   });
   var leftMenuView = new LeftMenuView({});
+  leftMenuView.$("div.nav-canvas").prepend(menuButtonList.$el);
   var noScriptView = new NoScriptView({});
   var contentView = new ContentView({});
 
